@@ -1,2 +1,5 @@
-echo "node_modules/" > .gitignore
-echo ".env" >> .gitignore
+# Ignorar node_modules en todas partes
+node_modules/
+
+# Ignorar todos los archivos .env en cualquier subcarpeta
+**/.env
