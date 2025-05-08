@@ -11,7 +11,7 @@ const CourseSelector: React.FC<CourseSelectorProps> = ({
             value={selectedCourseId ?? undefined}
             onChange={(e) => onSelect(e.target.value)}
             disabled={isLoading}
-            className="mt-2 block w-1/2 px-3 py-2 placeholder-gray-400 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="mt-2 block w-1/2 px-3 py-2 capitalize placeholder-gray-400 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
         >
             <option value="">Selecciona un curso</option>
             {courses.map((course) => (

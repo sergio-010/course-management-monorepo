@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { StudentModalProps } from '../interfaces';
-
 
 const StudentModal: React.FC<StudentModalProps> = ({
     isOpen,
@@ -10,10 +9,44 @@ const StudentModal: React.FC<StudentModalProps> = ({
     onNameChange,
     onEmailChange,
     onSave,
-    isLoading = false,
     isEditing = false,
 }) => {
+    const [isLoading, setIsLoading] = useState(false);
+
     if (!isOpen) return null;
+
+    const handleSave = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        const MINIMUM_LOADING_TIME = 1500;
+        const startTime = Date.now();
+
+        try {
+            await Promise.resolve(onSave(e));
+        } catch (error) {
+            console.error('Error al guardar:', error);
+        } finally {
+            const elapsedTime = Date.now() - startTime;
+            const remainingTime = MINIMUM_LOADING_TIME - elapsedTime;
+
+            setTimeout(() => {
+                setIsLoading(false);
+                resetForm();
+                onClose();
+            }, remainingTime > 0 ? remainingTime : 0);
+        }
+    };
+
+    const handleCancel = () => {
+        resetForm();
+        onClose();
+    };
+
+    const resetForm = () => {
+        onNameChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
+        onEmailChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
+    };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -27,7 +60,7 @@ const StudentModal: React.FC<StudentModalProps> = ({
                     </p>
                 </div>
 
-                <form onSubmit={onSave} className="space-y-4">
+                <form onSubmit={handleSave} className="space-y-4">
                     <div className="space-y-1">
                         <label htmlFor="student-name" className="block text-sm font-medium text-gray-700">
                             Nombre completo
@@ -41,6 +74,7 @@ const StudentModal: React.FC<StudentModalProps> = ({
                             className="w-full rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-blue-500 px-4 py-2.5 text-sm transition-all"
                             required
                             minLength={3}
+                            disabled={isLoading}
                         />
                     </div>
 
@@ -56,13 +90,14 @@ const StudentModal: React.FC<StudentModalProps> = ({
                             onChange={onEmailChange}
                             className="w-full rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-blue-500 px-4 py-2.5 text-sm transition-all"
                             required
+                            disabled={isLoading}
                         />
                     </div>
 
                     <div className="flex space-x-3 pt-2">
                         <button
                             type="button"
-                            onClick={onClose}
+                            onClick={handleCancel}
                             disabled={isLoading}
                             className="flex-1 rounded-xl bg-gray-100 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors disabled:opacity-70"
                         >

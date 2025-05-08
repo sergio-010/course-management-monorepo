@@ -5,6 +5,7 @@ import {
   addStudentToCourse,
   deleteStudentFromCourse,
 } from "../services/courseService";
+import { AxiosError } from "axios";
 
 export const useStudentsByCourse = (courseId?: string) => {
   return useQuery({
@@ -31,9 +32,20 @@ export const useAddStudentToCourse = () => {
         queryKey: ["course", variables.courseId],
       });
     },
-    onError: (error) => {
+    onError: (error: unknown) => {
       console.error("Error agregando estudiante:", error);
-      toast.error("❌ Error al agregar estudiante");
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
+
+        if (status === 409) {
+          toast.error("❌ El estudiante ya está registrado en este curso");
+        } else {
+          toast.error(`❌ ${message}`);
+        }
+      } else {
+        toast.error("❌ Error desconocido al agregar el estudiante");
+      }
     },
   });
 };

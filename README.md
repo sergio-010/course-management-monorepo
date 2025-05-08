@@ -7,13 +7,30 @@ Este es un monorepo que contiene:
 
 ## Cómo ejecutar el backend
 
-1. Ve a la carpeta `backend`.
+1. Ve a la carpeta `backend/`.
 
    ```bash
    cd backend
    ```
 
-2. Sigue las instrucciones del archivo course-management-system-api/README.md.
+2. Instala las dependencias
+
+```bash
+   npm install
+```
+
+3. Crea el archivo .env copiando .env.example y configurando las variables de entorno necesarias.
+
+```bash
+   cp .env.example .env
+
+```
+
+4.  Inicia el proyecto
+
+```bash
+   npm run start:dev
+```
 
 ## Cómo ejecutar el frontend
 
@@ -23,5 +40,23 @@ Este es un monorepo que contiene:
    cd frontend
    ```
 
-2. Sigue las instrucciones del archivo cd course-management-system/README.md.
+2. Instala las dependencias
+
+```bash
+   npm install
+```
+
+3. Crea el archivo .env copiando .env.example y configurando las variables de entorno necesarias.
+
+```bash
+   cp .env.example .env
+
+```
+
+4.  Inicia el proyecto
+
+```bash
+   npm run dev
+```
+
 # course-management-monorepo

@@ -72,9 +72,6 @@ export const addStudentToCourse = async (data: {
     courseId: data.courseId,
     studentId: response.data.data.id,
   };
-
-  console.log(dataAdd);
-
   const res = await axiosInstance.post<{ ok: boolean; message: string }>(
     `/course/students`,
     dataAdd
